@@ -47,6 +47,7 @@ func main() {
 	}
 
 	var rooms []Room
+	mapRoom := map[string]Room{}
 
 	for i := 0; i < len(roomsAndCoords); i++ {
 		splitRoomsAndCoords := strings.Split(roomsAndCoords[i], " ")
@@ -60,26 +61,23 @@ func main() {
 			Ycord: ycord,
 		}
 
+		mapRoom[roomName] = room
 		rooms = append(rooms, room)
 	}
 
 	// var roomLinks [][]string
 
 	for i := 0; i < len(links); i++ {
-		// fmt.Println(links[i])
 		for j := 0; j < len(rooms); j++ {
 			splitLinks := strings.Split(links[i], "-")
 			// check if the room name matches the first link value
 			if rooms[j].Name == splitLinks[0] {
-				// fmt.Println(rooms[j].Name, splitLinks[0])
-				connectedRoom := splitLinks[1]
-				if rooms[j].Name == connectedRoom {
-					rooms[j].Links = append(rooms[j].Links, rooms[j])
-				}
+				rooms[j].Links = append(rooms[j].Links, mapRoom[splitLinks[1]])
 			}
 		}
 	}
 
-	// fmt.Println(roomLinks)
-	fmt.Println(rooms)
+	for i := 0; i < len(rooms); i++ {
+		fmt.Println(rooms[i])
+	}
 }

@@ -1,4 +1,4 @@
-package main
+package lemin
 
 import (
 	"fmt"
@@ -8,7 +8,6 @@ import (
 	"strings"
 )
 
-// room is a linked list of room numbers
 type Room struct {
 	Name  string
 	Xcord int
@@ -22,19 +21,7 @@ func handleErr(err error) {
 	}
 }
 
-func main() {
-
-	readFile, err := os.ReadFile(os.Args[1])
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	data := strings.Split(string(readFile), "\n")
-
-	roomsAndCoords := []string{}
-
-	links := []string{}
-
+func GetRoomsAndLinks(data []string) (roomsAndCoords, links []string) {
 	for i := 0; i < len(data); i++ {
 
 		if len(strings.Fields(data[i])) == 3 {
@@ -45,16 +32,18 @@ func main() {
 			links = append(links, data[i])
 		}
 	}
+	return roomsAndCoords, links
+}
 
-	var rooms []*Room
-	mapRoom := map[string]*Room{}
+func CreateRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[string]*Room) {
+	mapRoom = map[string]*Room{}
 
 	for i := 0; i < len(roomsAndCoords); i++ {
 		splitRoomsAndCoords := strings.Split(roomsAndCoords[i], " ")
 		roomName := splitRoomsAndCoords[0]
-		xcord, err := strconv.Atoi(splitRoomsAndCoords[1])
+		xcord, err := strconv.Atoi(string(splitRoomsAndCoords[1]))
 		handleErr(err)
-		ycord, err := strconv.Atoi(splitRoomsAndCoords[2])
+		ycord, err := strconv.Atoi(string(splitRoomsAndCoords[2]))
 		handleErr(err)
 		room := Room{
 			Name:  roomName,
@@ -65,6 +54,11 @@ func main() {
 		mapRoom[roomName] = &room
 		rooms = append(rooms, &room)
 	}
+	return rooms, mapRoom
+}
+
+func AddLinkToRooms(roomsAndCoords, links []string) []*Room {
+	rooms, mapRoom := CreateRooms(roomsAndCoords, links)
 
 	for i := 0; i < len(links); i++ {
 		for j := 0; j < len(rooms); j++ {
@@ -76,6 +70,16 @@ func main() {
 			}
 		}
 	}
+	return rooms
+}
+
+func Rooms() {
+
+	data := ReadFile(os.Args[1])
+
+	roomsAndCoords, links := GetRoomsAndLinks(data)
+
+	rooms := AddLinkToRooms(roomsAndCoords, links)
 
 	for i := 0; i < len(rooms); i++ {
 		fmt.Println(*rooms[i])

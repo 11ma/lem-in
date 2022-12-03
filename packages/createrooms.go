@@ -56,8 +56,7 @@ func CreateRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[str
 	return rooms, mapRoom
 }
 
-func AddLinkToRooms(roomsAndCoords, links []string) []*Room {
-	rooms, mapRoom := CreateRooms(roomsAndCoords, links)
+func AddLinkToRooms(rooms []*Room, links []string, mapRoom map[string]*Room) []*Room {
 
 	for i := 0; i < len(links); i++ {
 		for j := 0; j < len(rooms); j++ {
@@ -72,13 +71,30 @@ func AddLinkToRooms(roomsAndCoords, links []string) []*Room {
 	return rooms
 }
 
-func Rooms() []*Room {
+func StartAndEndRooms(data []string, mapRoom map[string]*Room) (startingRoom, endRoom *Room) {
+
+	for i := 0; i < len(data); i++ {
+		if data[i] == "##start" {
+			startingRoom = mapRoom[string(data[i+1][0])]
+		}
+
+		if data[i] == "##end" {
+			endRoom = mapRoom[string(data[i+1][0])]
+		}
+	}
+
+	return startingRoom, endRoom
+}
+
+func Rooms() (linkedRooms []*Room, startRoom, endRoom *Room) {
 
 	data := ReadFile(os.Args[1])
 
 	roomsAndCoords, links := GetRoomsAndLinks(data)
+	rooms, mapRoom := CreateRooms(roomsAndCoords, links)
+	linkedRooms = AddLinkToRooms(rooms, links, mapRoom)
 
-	rooms := AddLinkToRooms(roomsAndCoords, links)
+	startRoom, endRoom = StartAndEndRooms(data, mapRoom)
 
-	return rooms
+	return linkedRooms, startRoom, endRoom
 }

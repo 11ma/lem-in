@@ -1,7 +1,6 @@
 package lemin
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -73,7 +72,7 @@ func AddLinkToRooms(roomsAndCoords, links []string) []*Room {
 	return rooms
 }
 
-func Rooms() {
+func Rooms() []*Room {
 
 	data := ReadFile(os.Args[1])
 
@@ -81,7 +80,5 @@ func Rooms() {
 
 	rooms := AddLinkToRooms(roomsAndCoords, links)
 
-	for i := 0; i < len(rooms); i++ {
-		fmt.Println(*rooms[i])
-	}
+	return rooms
 }

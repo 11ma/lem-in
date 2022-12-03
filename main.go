@@ -7,9 +7,13 @@ import (
 
 func main() {
 
-	rooms := lemin.Rooms()
+	rooms, start, end := lemin.Rooms()
 
-	for i := 0; i < len(rooms); i++ {
-		fmt.Println(*rooms[i])
-	}
+	// for i := 0; i < len(rooms); i++ {
+	// 	fmt.Println(*rooms[i])
+	// }
+
+	fmt.Println("rooms:", rooms)
+	fmt.Println("start:", start)
+	fmt.Println("end:", end)
 }

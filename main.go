@@ -13,7 +13,7 @@ type Room struct {
 	Name  string
 	Xcord int
 	Ycord int
-	Links []Room
+	Links []*Room
 }
 
 func handleErr(err error) {
@@ -46,8 +46,8 @@ func main() {
 		}
 	}
 
-	var rooms []Room
-	mapRoom := map[string]Room{}
+	var rooms []*Room
+	mapRoom := map[string]*Room{}
 
 	for i := 0; i < len(roomsAndCoords); i++ {
 		splitRoomsAndCoords := strings.Split(roomsAndCoords[i], " ")
@@ -61,8 +61,8 @@ func main() {
 			Ycord: ycord,
 		}
 
-		mapRoom[roomName] = room
-		rooms = append(rooms, room)
+		mapRoom[roomName] = &room
+		rooms = append(rooms, &room)
 	}
 
 	// var roomLinks [][]string
@@ -72,12 +72,13 @@ func main() {
 			splitLinks := strings.Split(links[i], "-")
 			// check if the room name matches the first link value
 			if rooms[j].Name == splitLinks[0] {
-				rooms[j].Links = append(rooms[j].Links, mapRoom[splitLinks[1]])
+				room := mapRoom[splitLinks[1]]
+				rooms[j].Links = append(rooms[j].Links, room)
 			}
 		}
 	}
 
 	for i := 0; i < len(rooms); i++ {
-		fmt.Println(rooms[i])
+		fmt.Println(*rooms[i])
 	}
 }

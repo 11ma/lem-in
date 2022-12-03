@@ -48,6 +48,8 @@ func main() {
 
 	var rooms []*Room
 	mapRoom := map[string]*Room{}
+	var startingRoom *Room
+	var endRoom *Room
 
 	for i := 0; i < len(roomsAndCoords); i++ {
 		splitRoomsAndCoords := strings.Split(roomsAndCoords[i], " ")
@@ -66,10 +68,23 @@ func main() {
 		rooms = append(rooms, &room)
 	}
 
+	// get starting and ending rooms
+	for i := 0; i < len(data); i++ {
+		if data[i] == "##start" {
+			// fmt.Println("you are the start:", data[i+1])
+			startingRoom = mapRoom[string(data[i+1][0])]
+		}
+
+		if data[i] == "##end" {
+			// fmt.Println("you are the start:", data[i+1])
+			endRoom = mapRoom[string(data[i+1][0])]
+		}
+	}
+
+	// check if the room name matches the first link value and add it to the room
 	for i := 0; i < len(links); i++ {
 		for j := 0; j < len(rooms); j++ {
 			splitLinks := strings.Split(links[i], "-")
-			// check if the room name matches the first link value
 			if rooms[j].Name == splitLinks[0] {
 				room := mapRoom[splitLinks[1]]
 				rooms[j].Links = append(rooms[j].Links, room)
@@ -77,7 +92,8 @@ func main() {
 		}
 	}
 
-	for i := 0; i < len(rooms); i++ {
-		fmt.Println(*rooms[i])
-	}
+	fmt.Println(startingRoom, endRoom)
+	// for i := 0; i < len(rooms); i++ {
+	// 	fmt.Println(*rooms[i])
+	// }
 }

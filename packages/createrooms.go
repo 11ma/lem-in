@@ -20,7 +20,7 @@ func handleErr(err error) {
 	}
 }
 
-func GetRoomsAndLinks(data []string) (roomsAndCoords, links []string) {
+func getRoomsAndLinks(data []string) (roomsAndCoords, links []string) {
 	for i := 0; i < len(data); i++ {
 
 		if len(strings.Fields(data[i])) == 3 {
@@ -34,7 +34,7 @@ func GetRoomsAndLinks(data []string) (roomsAndCoords, links []string) {
 	return roomsAndCoords, links
 }
 
-func CreateRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[string]*Room) {
+func createRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[string]*Room) {
 	mapRoom = map[string]*Room{}
 
 	for i := 0; i < len(roomsAndCoords); i++ {
@@ -56,8 +56,7 @@ func CreateRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[str
 	return rooms, mapRoom
 }
 
-func AddLinkToRooms(rooms []*Room, links []string, mapRoom map[string]*Room) []*Room {
-
+func addLinkToRooms(rooms []*Room, links []string, mapRoom map[string]*Room) []*Room {
 	for i := 0; i < len(links); i++ {
 		for j := 0; j < len(rooms); j++ {
 			splitLinks := strings.Split(links[i], "-")
@@ -71,7 +70,7 @@ func AddLinkToRooms(rooms []*Room, links []string, mapRoom map[string]*Room) []*
 	return rooms
 }
 
-func StartAndEndRooms(data []string, mapRoom map[string]*Room) (startingRoom, endRoom *Room) {
+func startAndEndRooms(data []string, mapRoom map[string]*Room) (startingRoom, endRoom *Room) {
 
 	for i := 0; i < len(data); i++ {
 		if data[i] == "##start" {
@@ -86,15 +85,18 @@ func StartAndEndRooms(data []string, mapRoom map[string]*Room) (startingRoom, en
 	return startingRoom, endRoom
 }
 
-func Rooms() (linkedRooms []*Room, startRoom, endRoom *Room) {
+func Rooms() (numberOfAnts int, linkedRooms []*Room, startRoom, endRoom *Room) {
 
 	data := ReadFile(os.Args[1])
 
-	roomsAndCoords, links := GetRoomsAndLinks(data)
-	rooms, mapRoom := CreateRooms(roomsAndCoords, links)
-	linkedRooms = AddLinkToRooms(rooms, links, mapRoom)
+	numberOfAnts, err := strconv.Atoi(data[0])
+	handleErr(err)
 
-	startRoom, endRoom = StartAndEndRooms(data, mapRoom)
+	roomsAndCoords, links := getRoomsAndLinks(data)
+	rooms, mapRoom := createRooms(roomsAndCoords, links)
+	linkedRooms = addLinkToRooms(rooms, links, mapRoom)
 
-	return linkedRooms, startRoom, endRoom
+	startRoom, endRoom = startAndEndRooms(data, mapRoom)
+
+	return numberOfAnts, linkedRooms, startRoom, endRoom
 }

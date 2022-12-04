@@ -37,5 +37,4 @@ func getRoute(start, end *lemin.Room) []string {
 		}
 	}
 	return routeSoFar
-
 }

@@ -57,13 +57,18 @@ func createRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[str
 }
 
 func addLinkToRooms(rooms []*Room, links []string, mapRoom map[string]*Room) []*Room {
+	// check if the room name matches the link and add it to the corresponding room
 	for i := 0; i < len(links); i++ {
 		for j := 0; j < len(rooms); j++ {
 			splitLinks := strings.Split(links[i], "-")
-			// check if the room name matches the first link value
 			if rooms[j].Name == splitLinks[0] {
 				room := mapRoom[splitLinks[1]]
+
+				// append the second room the first room's links of rooms
 				rooms[j].Links = append(rooms[j].Links, room)
+
+				// also append the first the room to the second room's links of rooms
+				room.Links = append(room.Links, rooms[j])
 			}
 		}
 	}

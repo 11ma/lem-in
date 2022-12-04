@@ -7,34 +7,51 @@ import (
 
 func main() {
 
-	// numberOfAnts, rooms, start, end := lemin.Rooms()
-	numberOfAnts, rooms, _, _ := lemin.Rooms()
+	numberOfAnts, rooms, start, end := lemin.Rooms()
+	// numberOfAnts, rooms, _, _ := lemin.Rooms()
 
 	fmt.Println("number of ants:", numberOfAnts)
 	fmt.Println("rooms:", rooms)
 	// fmt.Println("start:", start.Name)
 	// fmt.Println("end:", end.Name)
 
-	for i := 0; i < len(rooms); i++ {
-		fmt.Println("Room name:", rooms[i].Name, "Links:", rooms[i].Links)
-	}
+	// test all links are connected
+	// for i := 0; i < len(rooms); i++ {
+	// 	fmt.Println("Room name:", rooms[i].Name)
 
-	// find all valid paths
+	// 	for j := 0; j < len(rooms[i].Links); j++ {
+	// 		fmt.Println("Link:", rooms[i].Links[j].Name)
+	// 	}
+	// }
+
+	// find all paths
 	// from 1 how do i get to 0 with the current links?
-}
-
-func getRoute(start, end *lemin.Room) []string {
-
-	routeSoFar := []string{}
 	// starting room has a link to 3,
 	// we need to check the rooms linked to 3 to see if it is 0 if not keep checking
-	for i := 0; i < len(start.Links); i++ {
-		if start.Links[i].Name != end.Name {
+
+	// route := []string{}
+
+	// route = append(route, getRoutes(start, end)[0])
+
+	// fmt.Println(route)
+	getRoutes(start, end)
+}
+
+func getRoutes(start, end *lemin.Room) {
+
+	routeSoFar := []string{}
+
+	for i := 0; i < len(start.Links); {
+
+		if start.Links[i].Name == end.Name {
 			routeSoFar = append(routeSoFar, start.Links[i].Name)
-		} else if i == len(start.Links)-1 {
+		} else if !start.Links[i].Visited {
+			start.Links[i].Visited = true
 			routeSoFar = append(routeSoFar, start.Links[i].Name)
-			getRoute(start.Links[i], end)
+			i++
 		}
 	}
-	return routeSoFar
+
+	fmt.Println(routeSoFar)
+	// return routeSoFar
 }

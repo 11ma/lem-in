@@ -8,10 +8,11 @@ import (
 )
 
 type Room struct {
-	Name  string
-	Xcord int
-	Ycord int
-	Links []*Room
+	Name    string
+	Xcord   int
+	Ycord   int
+	Visited bool
+	Links   []*Room
 }
 
 func handleErr(err error) {
@@ -45,9 +46,10 @@ func createRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[str
 		ycord, err := strconv.Atoi(string(splitRoomsAndCoords[2]))
 		handleErr(err)
 		room := Room{
-			Name:  roomName,
-			Xcord: xcord,
-			Ycord: ycord,
+			Name:    roomName,
+			Xcord:   xcord,
+			Ycord:   ycord,
+			Visited: false,
 		}
 
 		mapRoom[roomName] = &room

@@ -81,19 +81,28 @@ func main() {
 		}
 	}
 
-	// check if the room name matches the first link value and add it to the room
+	// check if the room name matches the link and add it to the corresponding room
 	for i := 0; i < len(links); i++ {
 		for j := 0; j < len(rooms); j++ {
 			splitLinks := strings.Split(links[i], "-")
 			if rooms[j].Name == splitLinks[0] {
 				room := mapRoom[splitLinks[1]]
+
+				// append the second room the first room's links of rooms
 				rooms[j].Links = append(rooms[j].Links, room)
+
+				// also append the first the room to the second room's links of rooms
+				room.Links = append(room.Links, rooms[j])
 			}
 		}
 	}
 
 	fmt.Println(startingRoom, endRoom)
-	// for i := 0; i < len(rooms); i++ {
-	// 	fmt.Println(*rooms[i])
-	// }
+	for i := 0; i < len(rooms); i++ {
+		if rooms[i].Name == "0" {
+			for j := 0; j < len(rooms[i].Links); j++ {
+				fmt.Println(*rooms[i].Links[j])
+			}
+		}
+	}
 }

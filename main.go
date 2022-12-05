@@ -5,24 +5,30 @@ import (
 	lemin "lemin/packages"
 )
 
+func createGraph() (graph map[string][]string) {
+	graph = map[string][]string{}
+	_, rooms, _, _ := lemin.Rooms()
+	for i := 0; i < len(rooms); i++ {
+		for j := 0; j < len(rooms[i].Links); j++ {
+			graph[rooms[i].Name] = append(graph[rooms[i].Name], rooms[i].Links[j].Name)
+		}
+
+	}
+	return graph
+}
+
 func main() {
 
-	numberOfAnts, rooms, start, end := lemin.Rooms()
-	// numberOfAnts, rooms, _, _ := lemin.Rooms()
+	// numberOfAnts, rooms, mapRoom, start, end := lemin.Rooms()
 
-	fmt.Println("number of ants:", numberOfAnts)
-	fmt.Println("rooms:", rooms)
+	// print al rooms are connected
+	// fmt.Println("number of ants:", numberOfAnts)
+	// fmt.Println("rooms:", rooms)
 	// fmt.Println("start:", start.Name)
 	// fmt.Println("end:", end.Name)
 
-	// test all links are connected
-	// for i := 0; i < len(rooms); i++ {
-	// 	fmt.Println("Room name:", rooms[i].Name)
-
-	// 	for j := 0; j < len(rooms[i].Links); j++ {
-	// 		fmt.Println("Link:", rooms[i].Links[j].Name)
-	// 	}
-	// }
+	graph := createGraph()
+	fmt.Println(graph)
 
 	// find all paths
 	// from 1 how do i get to 0 with the current links?
@@ -34,24 +40,22 @@ func main() {
 	// route = append(route, getRoutes(start, end)[0])
 
 	// fmt.Println(route)
-	getRoutes(start, end)
+	// getRoutes(start, end)
 }
 
-func getRoutes(start, end *lemin.Room) {
+func getRoutes(graph map[string][]string, start, end *lemin.Room) {
 
-	routeSoFar := []string{}
+	routeSoFar := []string{start.Name}
+	startIndex := 0
+	endIndex := len(start.Links)
 
-	for i := 0; i < len(start.Links); {
-
-		if start.Links[i].Name == end.Name {
-			routeSoFar = append(routeSoFar, start.Links[i].Name)
-		} else if !start.Links[i].Visited {
-			start.Links[i].Visited = true
-			routeSoFar = append(routeSoFar, start.Links[i].Name)
-			i++
+	for startIndex < endIndex {
+		if start.Links[startIndex].Name != end.Name && !start.Links[startIndex].Visited {
+			start.Links[startIndex].Visited = true
+			routeSoFar = append(routeSoFar, start.Links[startIndex].Name)
 		}
+		startIndex++
 	}
-
 	fmt.Println(routeSoFar)
 	// return routeSoFar
 }

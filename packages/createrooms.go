@@ -46,10 +46,9 @@ func createRooms(roomsAndCoords, links []string) (rooms []*Room, mapRoom map[str
 		ycord, err := strconv.Atoi(string(splitRoomsAndCoords[2]))
 		handleErr(err)
 		room := Room{
-			Name:    roomName,
-			Xcord:   xcord,
-			Ycord:   ycord,
-			Visited: false,
+			Name:  roomName,
+			Xcord: xcord,
+			Ycord: ycord,
 		}
 
 		mapRoom[roomName] = &room
@@ -76,6 +75,25 @@ func addLinkToRooms(rooms []*Room, links []string, mapRoom map[string]*Room) []*
 	}
 	return rooms
 }
+
+// func addLinkToRooms(links []string, mapRoom map[string]*Room) (mapRoom map[string]*Room) {
+// 	// check if the room name matches the link and add it to the corresponding room
+// 	for i := 0; i < len(links); i++ {
+// 		for j := 0; j < len(mapRoom); j++ {
+// 			splitLinks := strings.Split(links[i], "-")
+// 			if mapRoom[mapRoom[j].Name == splitLinks[0] {
+// 				room := mapRoom[splitLinks[1]]
+
+// 				// append the second room the first room's links of rooms
+// 				rooms[j].Links = append(rooms[j].Links, room)
+
+// 				// also append the first the room to the second room's links of rooms
+// 				room.Links = append(room.Links, rooms[j])
+// 			}
+// 		}
+// 	}
+// 	return mapRoom
+// }
 
 func startAndEndRooms(data []string, mapRoom map[string]*Room) (startingRoom, endRoom *Room) {
 

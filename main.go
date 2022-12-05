@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	lemin "lemin/packages"
 )
 
@@ -20,6 +21,14 @@ func createGraph() (graph map[string][]string) {
 func main() {
 
 	// _, _, start, end := lemin.Rooms()
+	// _, rooms, _, _ := lemin.Rooms()
+
+	// for i := 0; i < len(rooms); i++ {
+	// 	for j := 0; j < len(rooms[i].Links); j++ {
+	// 		graph[rooms[i].Name] = append(graph[rooms[i].Name], rooms[i].Links[j].Name)
+	// 	}
+
+	// }
 
 	// print al rooms are connected
 	// fmt.Println("number of ants:", numberOfAnts)
@@ -27,8 +36,8 @@ func main() {
 	// fmt.Println("start:", start.Name)
 	// fmt.Println("end:", end.Name)
 
-	// graph := createGraph()
-	// fmt.Println(graph)
+	graph := createGraph()
+	fmt.Println(graph)
 
 	// find all paths
 	// from 1 how do i get to 0 with the current links?
@@ -47,7 +56,7 @@ func main() {
 
 	// route := hasPath(graph, start, end)
 	// undirectedroute := undirectedRoute(graph, start.Name, end.Name)
-	// route := hasPath(graph, start, end)
+	// route := hasPath(graph, start.Name, end.Name)
 
 	// fmt.Println(route)
 	// getRoutes(start, end)
@@ -57,19 +66,19 @@ func main() {
 // 	return hasPath(graph, start, end)
 // }
 
-// func hasPath(graph map[string][]string, start, end *lemin.Room) bool {
-// 	if start.Name == end.Name {
-// 		return true
-// 	}
+func hasPath(graph map[string][]string, start, end string) bool {
+	if start == end {
+		return true
+	}
 
-// 	for _, val := range graph[start.Name] {
-// 		if hasPath(graph, val, end) {
-// 			return true
-// 		}
-// 	}
+	for _, val := range graph[start] {
+		if hasPath(graph, val, end) {
+			return true
+		}
+	}
 
-// 	return false
-// }
+	return false
+}
 
 // dfs method
 // func hasPath(graph map[string][]string, start, end string) bool {
